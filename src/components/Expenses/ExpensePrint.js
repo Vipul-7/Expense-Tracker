@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import ExpenseItem from "./ExpenseItem";
+// import ExpenseItem from "./ExpenseItem";
 import "./ExpensePrint.css";
 import Card from "../UI/Card";
 import ExpensesFilter from "./ExpensesFilter";
-import react from "react";
+import ExpensesList from "./ExpensesList";
+import ExpensesChart from "./ExpensesChart";
 
 function ExpensePrint(props) {
-  const [filteredYear, setFilteredYear] = useState("2020");
+  const [filteredYear, setFilteredYear] = useState("2024");
 
   const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
   };
+
+  // for filltering the date
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
+  
 
   return (
     <Card className="expenses">
@@ -18,15 +26,11 @@ function ExpensePrint(props) {
         select={filteredYear}
         onChangeFilter={filterChangeHandler}
       />
-      {props.items.map((expense) => (
-        <ExpenseItem
-          key={expense.id}
-          tit={expense.title}
-          amt={expense.amount}
-          date={expense.date}
-        />
-      ))}
-      {/* <ExpenseItem
+      <ExpensesChart expenses={filteredExpenses} />
+      <ExpensesList items={filteredExpenses} />
+    </Card>
+
+{/* <ExpenseItem
         tit={props.items[0].title}
         amt={props.items[0].amount}
         date={props.items[0].date}
@@ -46,7 +50,6 @@ function ExpensePrint(props) {
         amt={props.items[3].amount}
         date={props.items[3].date}
       ></ExpenseItem> */}
-    </Card>
   );
 }
 
